@@ -10,7 +10,12 @@ export class ApiClientError extends Error {
   }
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL !== undefined
+    ? process.env.NEXT_PUBLIC_API_URL
+    : typeof window !== 'undefined'
+    ? ''
+    : 'http://localhost:5000';
 
 interface RequestOptions extends RequestInit {
   data?: unknown;
@@ -18,12 +23,15 @@ interface RequestOptions extends RequestInit {
 
 /**
  * Robust fetch wrapper that automatically includes HTTP-only session cookies
- * and standardizes error handling.
+ * and standardizes error handling. Supports both absolute and same-origin relative URLs.
  */
 export async function apiClient<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   const { data, headers = {}, ...customOptions } = options;
 
-  const url = `${API_BASE_URL.replace(/\/+$/, '')}/${endpoint.replace(/^\/+/, '')}`;
+  const cleanEndpoint = endpoint.replace(/^\/+/, '');
+  const url = API_BASE_URL
+    ? `${API_BASE_URL.replace(/\/+$/, '')}/${cleanEndpoint}`
+    : `/${cleanEndpoint}`;
 
   const defaultHeaders: Record<string, string> = {
     'Accept': 'application/json',
