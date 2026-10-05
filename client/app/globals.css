@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --tg-theme-bg-color: #0a0914;
+  --tg-theme-text-color: #f8fafc;
+  --tg-theme-hint-color: #94a3b8;
+  --tg-theme-link-color: #a855f7;
+  --tg-theme-button-color: #7c3aed;
+  --tg-theme-button-text-color: #ffffff;
+  --tg-theme-secondary-bg-color: #131127;
+}
+
+/* Telegram Mini App Safe Viewport Styles */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--tg-theme-bg-color, #0a0914);
+  color: var(--tg-theme-text-color, #f8fafc);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #332a4e;
+  border-radius: 9999px;
+}
