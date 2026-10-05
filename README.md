@@ -464,5 +464,45 @@ telegram-mini-app/
 │
 ├── .gitignore                           # Git ignore rules protecting secrets
 ├── package.json                         # Root monorepo workspace configuration
+├── vercel.json                          # Vercel serverless routing configuration
 └── README.md                            # Comprehensive documentation
 ```
+
+---
+
+## 16. Deploying on Vercel (Unified Deployment)
+
+This repository is configured for unified deployment on [Vercel](https://vercel.com), running the **Next.js frontend** and the **Express backend** (as a Serverless Function) under the exact same domain. This eliminates cross-origin cookie restrictions and CORS hurdles inside Telegram WebViews.
+
+### Step 1: Push to GitHub
+Your repository is live at:
+[https://github.com/AmanuelCrafts/telegram-mini-app](https://github.com/AmanuelCrafts/telegram-mini-app)
+
+### Step 2: Import into Vercel
+1. Go to your [Vercel Dashboard](https://vercel.com/dashboard) and click **"Add New..."** → **"Project"**.
+2. Select your GitHub repository: `AmanuelCrafts/telegram-mini-app`.
+3. Configure Project Settings:
+   - **Framework Preset**: Next.js (or Other / auto-detected)
+   - **Root Directory**: `./` (leave as repository root)
+   - **Build Command**: `npm run build`
+   - **Install Command**: `npm install`
+
+### Step 3: Add Production Environment Variables in Vercel
+In the Vercel project configuration, add the following under **Environment Variables**:
+
+| Variable Name | Value | Purpose |
+|---|---|---|
+| `MONGODB_URI` | `mongodb+srv://user:pass@cluster.mongodb.net/telegram_rewards` | MongoDB Atlas database connection |
+| `TELEGRAM_BOT_TOKEN` | `1234567890:ABC...` | From @BotFather for HMAC validation |
+| `SESSION_SECRET` | *(Random 32+ chars)* | For signing HTTP-only session cookies |
+| `NODE_ENV` | `production` | Enables secure cookies & production optimizations |
+| `AUTH_RATE_LIMIT` | `10` | Brute force rate limiter |
+
+*(Note: `NEXT_PUBLIC_API_URL` can be left blank in production on Vercel so the frontend automatically communicates with `/api` on the same domain).*
+
+### Step 4: Deploy & Connect to Telegram
+1. Click **Deploy**.
+2. Once the build finishes, copy your Vercel deployment domain (e.g. `https://telegram-mini-app.vercel.app`).
+3. Open Telegram → `@BotFather` → `/mybots` → Select your bot → **Bot Settings** → **Menu Button** (or `/newapp` Web App URL) → paste your Vercel HTTPS URL.
+4. Launch your bot in Telegram and test your seamless authentication!
+
